@@ -1,20 +1,15 @@
 import torch
 import os
 import numpy as np
-from numpy.fft import fftn, ifftn
 from torch.nn.modules.conv import Conv3d
 from torch.nn.modules.pooling import MaxPool3d
 import h5py
 from torch import nn
 import torch.optim as optim
-from torch.utils import tensorboard
 from torch.utils.data import DataLoader, Dataset
 import matplotlib.pyplot as plt
-from torch.utils.tensorboard import SummaryWriter
 from preprocessing import *
-from torchsummary import summary
 
-writer = SummaryWriter(log_dir='logs')
 
 cwd = os.getcwd()
 save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/data'

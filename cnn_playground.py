@@ -74,6 +74,8 @@ class LoadData(Dataset):
         y = self.labels[idx]
         return x, y
 
+device = torch.device('cuda')
+
 train = LoadData(train_x[:,None,:,:,:], train_y)
 #test = LoadData(test_x, test_y)
 
@@ -127,7 +129,7 @@ def train(dataloader, model, loss_fx, optimizer):
     size = len(dataloader.dataset)
     model.train()
     for batch, (X,y) in enumerate(dataloader):
-        X, y = X.float(), y.float()
+        X, y = X.float().to(device), y.float().to(device)
         plt.imshow(X[0,0,:,:,15])
         plt.savefig('figures')
         

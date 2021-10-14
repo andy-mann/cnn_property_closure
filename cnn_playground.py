@@ -62,7 +62,7 @@ class LoadData(Dataset):
         return x, y
 
 if torch.cuda.is_available():
-    devive = torch.device('cuda')
+    device = torch.device('cuda')
 else:
     device = torch.device('cpu')
 print(device)
@@ -132,7 +132,7 @@ def train(dataloader, model, loss_fx, optimizer):
 
 model = ConvNetwork().to(device)
 print(model)
-loss_fn = nn.L1Loss()
+loss_fn = nn.MSEsLoss()
 optimizer = optim.SGD(model.parameters(), lr=.001, momentum=.9)
 epochs = 2
 for t in range(epochs):

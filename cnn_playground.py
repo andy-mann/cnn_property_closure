@@ -17,7 +17,7 @@ save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/dat
 #dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
 dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 
-dps = -1
+dps = 32*4
 
 #------------------load microstructure data---------------------#
 train_x = os.path.join(dir, 'train_stats.h5')
@@ -96,10 +96,10 @@ class ConvNetwork(nn.Module):
         super(ConvNetwork, self).__init__()
         self.network = nn.Sequential(
             nn.Conv3d(1,16,3, padding=1),
-
+            nn.ReLU(),
             nn.Flatten(),
-
             nn.Linear(16*31**3, 512),
+            nn.ReLU(),
             nn.Linear(512,1),
         )
         
@@ -113,12 +113,15 @@ def train(dataloader, model, loss_fx, optimizer):
     model.train()
     for batch, (X,y) in enumerate(dataloader):
         X, y = X.float().to(device), y.float().to(device)
+        print(X)
+        print(y)
         #plt.imshow(X[0,0,:,:,15])
         #plt.savefig('figures')
         
         #compute loss
         pred = model(X)
         loss = loss_fx(pred, y)
+        print(pred)
 
         #backprop
         optimizer.zero_grad()
@@ -132,9 +135,9 @@ def train(dataloader, model, loss_fx, optimizer):
 
 model = ConvNetwork().to(device)
 print(model)
-loss_fn = nn.MSEsLoss()
+loss_fn = nn.MSELoss()
 optimizer = optim.SGD(model.parameters(), lr=.001, momentum=.9)
-epochs = 2
+epochs = 1
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train(train_dataloader, model, loss_fn, optimizer)

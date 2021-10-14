@@ -145,6 +145,3 @@ for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train(train_dataloader, model, loss_fn, optimizer)
 print("Done!")
-writer.flush()
-writer.close()
-

@@ -14,8 +14,8 @@ from preprocessing import *
 cwd = os.getcwd()
 save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/data'
 
-dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
-#dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
+#dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
+dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 
 dps = -1
 
@@ -61,7 +61,11 @@ class LoadData(Dataset):
         y = self.labels[idx]
         return x, y
 
-device = torch.device('cuda')
+if torch.cuda.is_available():
+    devive = torch.device('cuda')
+else:
+    device = torch.device('cpu')
+print(device)
 
 train = LoadData(train_x[:,None,:,:,:], train_y)
 #test = LoadData(test_x, test_y)
@@ -91,20 +95,11 @@ class ConvNetwork(nn.Module):
     def __init__(self):
         super(ConvNetwork, self).__init__()
         self.network = nn.Sequential(
-            nn.Conv3d(1,16,3),
-            nn.MaxPool3d(3),
-            nn.Conv3d(16,32,3),
-            nn.MaxPool3d(3),
-            nn.Conv3d(32,64,3),
-            nn.MaxPool3d(3),
-            nn.Conv3d(64,128,3),
-            nn.MaxPool3d(3),
-            nn.Conv3d(128,256,3),
-            nn.MaxPool3d(3),
+            nn.Conv3d(1,16,3, padding=1),
 
             nn.Flatten(),
 
-            nn.Linear(686, 512),
+            nn.Linear(16*31**3, 512),
             nn.Linear(512,1),
         )
         
@@ -135,12 +130,11 @@ def train(dataloader, model, loss_fx, optimizer):
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 
-model = FlatNetwork().to(device)
+model = ConvNetwork().to(device)
 print(model)
-#summary(model)
 loss_fn = nn.L1Loss()
 optimizer = optim.SGD(model.parameters(), lr=.001, momentum=.9)
-epochs = 25
+epochs = 2
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train(train_dataloader, model, loss_fn, optimizer)

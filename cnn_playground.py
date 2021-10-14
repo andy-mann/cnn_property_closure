@@ -14,15 +14,15 @@ from preprocessing import *
 cwd = os.getcwd()
 save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/data'
 
-
-cwd = os.getcwd()
+dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
+#dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 
 dps = -1
 
 #------------------load microstructure data---------------------#
-train_x = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data', 'train_stats.h5')
-test_x = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data', 'test_stats.h5')
-valid_x = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data', 'valid_stats.h5')
+train_x = os.path.join(dir, 'train_stats.h5')
+test_x = os.path.join(dir, 'test_stats.h5')
+valid_x = os.path.join(dir, 'valid_stats.h5')
 
 train_x = h5py.File(train_x)
 #test_x = h5py.File(test_x)
@@ -34,9 +34,9 @@ train_x = train_x['2PS'][:dps].real
 
 #------------------load response data---------------------#
 
-train_r = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data', 'train_eff_stiffness.h5')
-test_r = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data', 'test_eff_stiffness.h5')
-valid_r = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data', 'valid_eff_stiffness.h5')
+train_r = os.path.join(dir, 'train_eff_stiffness.h5')
+test_r = os.path.join(dir, 'test_eff_stiffness.h5')
+valid_r = os.path.join(dir, 'valid_eff_stiffness.h5')
 
 train_r = h5py.File(train_r)
 #test_r = h5py.File(test_r)
@@ -45,19 +45,6 @@ train_r = h5py.File(train_r)
 train_y = train_r['effective_stiffness'][:dps]
 #test_y = test_r['effective_stiffness']
 #valid_y = valid_r['effective_stiffness']
-
-
-#train = Responses(train_stress, train_strain)
-#eff_p = train.get_effective_property(case='train')
-
-#TODO: try two things: two channel input for real and imaginary parts OR remove all imaginary parts (if theyre spurious)
-#TODO: need to find out if the 2PS SHOULD have imaginary parts
-
-
-
-
-#use 16-32-64-128-256 (16 filters that are 3x3x3, 32 filters that are 3x3x3, etc...)
-# 2048-1024
 
 class LoadData(Dataset):
     def __init__(self, input, labels, transform=None, target_transform=None):
@@ -93,6 +80,7 @@ class FlatNetwork(nn.Module):
             nn.ReLU(1024),
             nn.Linear(1024,1)
         )
+
 
     def forward(self, x):
         logits = self.network(x)
@@ -130,10 +118,8 @@ def train(dataloader, model, loss_fx, optimizer):
     model.train()
     for batch, (X,y) in enumerate(dataloader):
         X, y = X.float().to(device), y.float().to(device)
-        plt.imshow(X[0,0,:,:,15])
-        plt.savefig('figures')
-        
-        #writer.add_image('input', X[0,:,:,:,15])
+        #plt.imshow(X[0,0,:,:,15])
+        #plt.savefig('figures')
         
         #compute loss
         pred = model(X)
@@ -142,7 +128,6 @@ def train(dataloader, model, loss_fx, optimizer):
         #backprop
         optimizer.zero_grad()
         loss.backward()
-        writer.add_scalar("Loss/Train", loss, batch)
         optimizer.step()
 
         if batch % 100 == 0:
@@ -150,7 +135,7 @@ def train(dataloader, model, loss_fx, optimizer):
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 
-model = FlatNetwork()
+model = FlatNetwork().to(device)
 print(model)
 #summary(model)
 loss_fn = nn.L1Loss()

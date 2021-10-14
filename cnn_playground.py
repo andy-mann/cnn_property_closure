@@ -14,10 +14,10 @@ from preprocessing import *
 cwd = os.getcwd()
 save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/data'
 
-#dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
-dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
+dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
+#dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 
-dps = 32*4
+dps = -1
 
 #------------------load microstructure data---------------------#
 train_x = os.path.join(dir, 'train_stats.h5')
@@ -45,6 +45,12 @@ train_r = h5py.File(train_r)
 train_y = train_r['effective_stiffness'][:dps]
 #test_y = test_r['effective_stiffness']
 #valid_y = valid_r['effective_stiffness']
+
+def normalize(y):
+    norm = (y - y.min())/(y.max()-y.min())
+    return norm
+
+train_y = normalize(train_y)
 
 class LoadData(Dataset):
     def __init__(self, input, labels, transform=None, target_transform=None):
@@ -113,15 +119,15 @@ def train(dataloader, model, loss_fx, optimizer):
     model.train()
     for batch, (X,y) in enumerate(dataloader):
         X, y = X.float().to(device), y.float().to(device)
-        print(X)
-        print(y)
+        #print(X)
+        #print(y)
         #plt.imshow(X[0,0,:,:,15])
         #plt.savefig('figures')
         
         #compute loss
         pred = model(X)
         loss = loss_fx(pred, y)
-        print(pred)
+        #print(pred)
 
         #backprop
         optimizer.zero_grad()

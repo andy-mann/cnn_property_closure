@@ -1,4 +1,5 @@
 from torch import nn
+import torch
 
 
 class ConvBlock(nn.Module):
@@ -18,3 +19,11 @@ class ConvBlock(nn.Module):
 
     def forward(self,x):
         return self.block(x)
+
+
+class Mean(nn.Module):
+    def __init__(self):
+        super(Mean, self).__init__()
+
+    def forward(self,x):
+        return torch.mean(x,(1,2,3,4))[:,None]

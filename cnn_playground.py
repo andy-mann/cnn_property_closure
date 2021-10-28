@@ -18,7 +18,7 @@ save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/dat
 dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
 #dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 
-dps = -1
+dps = -0
 
 #------------------load microstructure data---------------------#
 train_x = os.path.join(dir, 'train_stats.h5')
@@ -110,7 +110,7 @@ model = networks.MOCNN().to(device)
 print(model)
 loss_fn = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=.001)
-epochs = 20
+epochs = 60
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train(train_dataloader, model, loss_fn, optimizer)

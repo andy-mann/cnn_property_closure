@@ -24,9 +24,9 @@ class Structures():
         plt.show()
 
     def calc_statistics(self):
-        f_k = np.fft.fftn(self.structures, axes=(2,3,4))
+        f_k = np.fft.rfftn(self.structures, axes=(2,3,4))
         F = 1/31**3 * np.conjugate(f_k[:,0,...]) * f_k[:,0,...]
-        f = np.fft.ifftn(F, axes=(1,2,3))
+        f = np.fft.irfftn(F, axes=(1,2,3))
         fshift = np.fft.fftshift(f, axes=(1,2,3))
         return fshift
 

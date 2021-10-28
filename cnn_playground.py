@@ -2,12 +2,13 @@ import torch
 import os
 import numpy as np
 from torch.nn.modules.conv import Conv3d
-from torch.nn.modules.pooling import MaxPool3d
+from mocnn import *
 import h5py
 from torch import nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 import matplotlib.pyplot as plt
+from mocnn import networks
 from preprocessing import *
 
 
@@ -79,40 +80,6 @@ train = LoadData(train_x[:,None,:,:,:], train_y)
 train_dataloader = DataLoader(train, batch_size=32)
 #test_dataloader = DataLoader(test, batch_size=32)
 
-class FlatNetwork(nn.Module):
-    def __init__(self):
-        super(FlatNetwork, self).__init__()
-        self.network = nn.Sequential(
-            nn.Flatten(),
-            nn.Linear(31**3, 2048),
-            nn.ReLU(2048),
-            nn.Linear(2048, 1024),
-            nn.ReLU(1024),
-            nn.Linear(1024,1)
-        )
-
-
-    def forward(self, x):
-        logits = self.network(x)
-        return logits
-
-
-class ConvNetwork(nn.Module):
-    def __init__(self):
-        super(ConvNetwork, self).__init__()
-        self.network = nn.Sequential(
-            nn.Conv3d(1,16,3, padding=1),
-            nn.ReLU(),
-            nn.Flatten(),
-            nn.Linear(16*31**3, 512),
-            nn.ReLU(),
-            nn.Linear(512,1),
-        )
-        
-    def forward(self, x):
-        logits = self.network(x)
-        return logits
-
 
 def train(dataloader, model, loss_fx, optimizer):
     size = len(dataloader.dataset)
@@ -139,11 +106,11 @@ def train(dataloader, model, loss_fx, optimizer):
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 
-model = ConvNetwork().to(device)
+model = networks.MOCNN().to(device)
 print(model)
 loss_fn = nn.MSELoss()
-optimizer = optim.SGD(model.parameters(), lr=.001, momentum=.9)
-epochs = 1
+optimizer = optim.Adam(model.parameters(), lr=.001)
+epochs = 20
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train(train_dataloader, model, loss_fn, optimizer)

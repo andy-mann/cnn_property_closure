@@ -8,6 +8,7 @@ class MO_CNN(pl.LightningModule):
     def __init__(self, use_cuda=True):
         super().__init__()
         #self.save_hyperparameters()
+        self.results = None
 
         self.net = MultiOutputCNN()
         #self.net = self.net.to(self.device)

@@ -48,8 +48,19 @@ class MO_CNN(pl.LightningModule):
             loss = self.loss(y_pred, y).detach()
 
     def test_step(self,batch, batch_idx):
-        pass
+        X, y = batch
 
+        with torch.no_grad():
+            y_pred = self.forward(X).detach()
+            loss = self.loss(y_pred, y).detach()
+
+        if self.results is None:
+            self.results = y_pred
+        else:
+            self.results = torch.cat((self.results, y_pred), dim=0)
+
+    def return_results(self):
+        return self.results
 
     def forward(self, x):
         return self.net(x)

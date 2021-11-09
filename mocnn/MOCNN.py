@@ -5,7 +5,7 @@ from mocnn.networks import *
 from torch import nn, optim
 
 class MO_CNN(pl.LightningModule):
-    def __init__(self, loss):
+    def __init__(self):
         super().__init__()
         self.save_hyperparameters()
         self.results = None

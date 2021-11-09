@@ -31,8 +31,11 @@ def main():
 
     model = MO_CNN()
     model = model.float()
-    #trainer = pl.Trainer(max_epochs=1, gpus=-1)
-    trainer = pl.Trainer(max_epochs=1)
+    trainer = pl.Trainer(max_epochs=1, gpus=-1, progress_bar_refresh_rate=0)
+    #trainer = pl.Trainer(max_epochs=1)
+
+    network_size = count_parameters(model)
+    print(f'There are {network_size} tunable parameters in this model')
 
     train_data = LoadData(dir, 'train')
     valid_data = LoadData(dir, 'valid')

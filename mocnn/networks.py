@@ -8,9 +8,10 @@ class MultiOutputCNN(nn.Module):
 
 
         self.MultiOutputCNN = nn.Sequential(
-            ConvBlock(1,8,2),
+            ConvBlock(1,8,5),
             ConvBlock(8,16),
-            ConvBlock(16,16,2),
+            ConvBlock(16,32),
+            ConvBlock(32,16),
             ConvBlock(16,8),
             ConvBlock(8,1,1),
             Mean()

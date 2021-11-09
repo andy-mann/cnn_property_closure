@@ -2,6 +2,9 @@ import numpy as np
 import torch
 
 
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
 def un_normalize(predictions, truth):
     unnorm = (predictions * (np.max(truth) - np.min(truth))) + np.min(truth)
     return unnorm

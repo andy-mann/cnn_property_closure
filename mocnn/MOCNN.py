@@ -5,15 +5,14 @@ from mocnn.networks import *
 from torch import nn, optim
 
 class MO_CNN(pl.LightningModule):
-    def __init__(self, use_cuda=True):
+    def __init__(self, loss):
         super().__init__()
-        #self.save_hyperparameters()
+        self.save_hyperparameters()
         self.results = None
 
         self.net = MultiOutputCNN()
-        #self.net = self.net.to(self.device)
 
-        self.loss_fn = nn.MSELoss()
+        #self.loss_fn = nn.MSELoss()
 
     def loss(self, pred, y):
         fxn = nn.MSELoss()
@@ -21,7 +20,7 @@ class MO_CNN(pl.LightningModule):
         return loss
 
     def configure_optimizers(self):
-        self.optimizer = optim.Adam(self.parameters(), lr=.001)
+        self.optimizer = optim.Adam(self.parameters(), lr=.05)
         self.scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=60, eta_min=1e-8)
 
         return {

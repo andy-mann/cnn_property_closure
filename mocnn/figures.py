@@ -10,5 +10,5 @@ def pred_vs_truth(prediction, truth, fpath):
     plt.scatter(truth, prediction)
     plt.xlabel('True Stifness')
     plt.ylabel('Predicted Stiffness')
-    plt.savefig(f'{fpath}/output/Pred_vs_Truth')
+    plt.savefig(f'{fpath}/output')
 

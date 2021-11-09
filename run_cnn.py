@@ -31,7 +31,8 @@ def main():
 
     model = MO_CNN()
     model = model.float()
-    trainer = pl.Trainer(max_epochs=60, gpus=-1, progress_bar_refresh_rate=0)
+    trainer = pl.Trainer(max_epochs=120
+    , gpus=-1, progress_bar_refresh_rate=0)
     #trainer = pl.Trainer(max_epochs=1)
 
     network_size = count_parameters(model)
@@ -40,8 +41,8 @@ def main():
     train_data = LoadData(dir, 'train')
     valid_data = LoadData(dir, 'valid')
 
-    train_loader = DataLoader(train_data, batch_size=32, pin_memory=True, num_workers=4)
-    valid_loader = DataLoader(valid_data, batch_size=32, pin_memory=True, num_workers=4)
+    train_loader = DataLoader(train_data, batch_size=64, pin_memory=True, num_workers=4)
+    valid_loader = DataLoader(valid_data, batch_size=64, pin_memory=True, num_workers=4)
 
     print('data loaded')
 

@@ -13,8 +13,8 @@ from preprocessing import *
 cwd = os.getcwd()
 save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/data'
 
-#dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
-dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
+dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
+#dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 print(dir)
 
 '''
@@ -71,7 +71,7 @@ def main():
 
     print(f'MASE is {MASE} and MAE is {MAE}')
 
-    pred_vs_truth(predictions, y_test)
+    pred_vs_truth(predictions, y_test, dir)
 
     return model
 

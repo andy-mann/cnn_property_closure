@@ -17,12 +17,6 @@ dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
 #dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 print(dir)
 
-'''
-profiler = pl.profiler.PyTorchProfiler(use_cuda=False, filename='prof.txt', record_shapes=True, profile_memory=True)
-profiler = None
-trainer = pl.Trainer(max_epochs=1, val_check_interval=1.0, progress_bar_refresh_rate=0, profiler=profiler)
-'''
-
 def main():
     print('starting up the matrix')
 
@@ -61,7 +55,7 @@ def main():
     test_data = LoadData(dir, 'test')
     test_loader = DataLoader(test_data, batch_size=32, pin_memory=True, num_workers=4)
 
-    trainer.test(model, test_dataloaders=test_loader)
+    trainer.test(model, dataloaders=test_loader)
 
     predictions = model.return_results()
     predictions = predictions.cpu().numpy()
@@ -73,7 +67,7 @@ def main():
     MASE = mase(predictions, y_test)
     MAE = mae(predictions, y_test)
 
-    print(f'MASE is {MASE} and MAE is {MAE}')
+    print(f'MASE is {MASE * 100} and MAE is {MAE * 100}')
 
     pred_vs_truth(predictions, y_test, dir)
 

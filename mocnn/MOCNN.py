@@ -34,11 +34,9 @@ class MO_CNN(pl.LightningModule):
         #compute loss
         y_pred = self.forward(X)
         loss = self.loss(y_pred, y)
-            
-            #backprop
-                #self.optimizer.zero_grad()
-                #loss.backward()
-                #self.optimizer.step()
+
+        self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)    
+        
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -47,6 +45,9 @@ class MO_CNN(pl.LightningModule):
         with torch.no_grad():
             y_pred = self.forward(X).detach()
             loss = self.loss(y_pred, y).detach()
+
+        self.log('val_loss', loss)
+        return loss
 
     def test_step(self,batch, batch_idx):
         X, y = batch
@@ -59,6 +60,8 @@ class MO_CNN(pl.LightningModule):
             self.results = y_pred
         else:
             self.results = torch.cat((self.results, y_pred), dim=0)
+
+        return loss
 
     def return_results(self):
         return self.results

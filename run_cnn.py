@@ -6,18 +6,17 @@ from torch.utils.data.dataloader import DataLoader
 import pytorch_lightning as pl
 from mocnn.MOCNN import MO_CNN
 from mocnn.dataloader import LoadData
+from mocnn.helpers import *
+from mocnn.figures import *
 from preprocessing import *
 
 cwd = os.getcwd()
 save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/data'
 
-dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
-#dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
+#dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
+dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 print(dir)
 
-
-device = torch.device("cpu") if not torch.cuda.is_available() else torch.device("cuda:0")
-print(f'Using {device}')
 '''
 profiler = pl.profiler.PyTorchProfiler(use_cuda=False, filename='prof.txt', record_shapes=True, profile_memory=True)
 profiler = None
@@ -32,7 +31,8 @@ def main():
 
     model = MO_CNN()
     model = model.float()
-    trainer = pl.Trainer(max_epochs=4, gpus=-1)
+    #trainer = pl.Trainer(max_epochs=1, gpus=-1)
+    trainer = pl.Trainer(max_epochs=1)
 
     train_data = LoadData(dir, 'train')
     valid_data = LoadData(dir, 'valid')
@@ -59,10 +59,21 @@ def main():
 
     trainer.test(model, test_dataloaders=test_loader)
 
-    results = model.return_results()
-    results = results.cpu().numpy()
+    predictions = model.return_results()
+    predictions = predictions.cpu().numpy()
 
-    np.save(os.path.join(dir, 'results.npy'), results)
+    np.save(os.path.join(dir, 'results.npy'), predictions)
+
+    x_test, y_test = dataset_to_np(test_data)
+
+    MASE = mase(predictions, y_test)
+    MAE = mae(predictions, y_test)
+
+    print(f'MASE is {MASE} and MAE is {MAE}')
+
+    pred_vs_truth(predictions, y_test)
+
+    return model
 
 
 

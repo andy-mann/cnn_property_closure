@@ -1,12 +1,12 @@
 ---------------------------------------
-Begin PBS Prologue Tue Nov  9 15:51:29 EST 2021
-Job ID:     7047900.sched-hive.pace.gatech.edu
+Begin PBS Prologue Tue Nov  9 16:27:22 EST 2021
+Job ID:     7047933.sched-hive.pace.gatech.edu
 User ID:    amann37
-Job name:   gpuTest
+Job name:   NN_Training
 Queue:      hive-gpu-short
-End PBS Prologue Tue Nov  9 15:51:29 EST 2021
+End PBS Prologue Tue Nov  9 16:27:22 EST 2021
 ---------------------------------------
-Tue Nov  9 15:51:29 2021       
+Tue Nov  9 16:27:23 2021       
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 465.19.01    Driver Version: 465.19.01    CUDA Version: 11.3     |
 |-------------------------------+----------------------+----------------------+
@@ -34,7 +34,7 @@ python run_cnn.py
 GPU available: True, used: True
 TPU available: False, using: 0 TPU cores
 IPU available: False, using: 0 IPUs
-/storage/home/hhive1/amann37/.conda/envs/mat_inf/lib/python3.9/site-packages/torch/utils/data/dataloader.py:478: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+/storage/home/hhive1/amann37/.conda/envs/mat_inf/lib/python3.9/site-packages/torch/utils/data/dataloader.py:478: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
   warnings.warn(_create_warning_msg(
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
 
@@ -59,16 +59,16 @@ loading test data!
 DATALOADER:0 TEST RESULTS
 {}
 --------------------------------------------------------------------------------
-MASE is 0.04121395945549011 and MAE is 0.011551596224308014
+MASE is 0.11108455061912537 and MAE is 0.03120795637369156
 ---------------------------------------
-Begin PBS Epilogue Tue Nov  9 16:06:45 EST 2021
-Job ID:     7047900.sched-hive.pace.gatech.edu
+Begin PBS Epilogue Tue Nov  9 16:46:56 EST 2021
+Job ID:     7047933.sched-hive.pace.gatech.edu
 User ID:    amann37
-Job name:   gpuTest
-Resources:  nodes=1:ppn=1:gpus=1,pmem=32gb,walltime=04:00:00,neednodes=1:ppn=1:gpus=1
-Rsrc Used:  cput=00:15:05,vmem=153432488kb,walltime=00:15:16,mem=10891820kb,energy_used=0
+Job name:   NN_Training
+Resources:  nodes=1:ppn=2:gpus=1,pmem=64gb,walltime=04:00:00,neednodes=1:ppn=2:gpus=1
+Rsrc Used:  cput=00:24:04,vmem=156896184kb,walltime=00:19:34,mem=8742200kb,energy_used=0
 Queue:      hive-gpu-short
 Nodes:     
 atl1-1-01-018-31.pace.gatech.edu
-End PBS Epilogue Tue Nov  9 16:06:46 EST 2021
+End PBS Epilogue Tue Nov  9 16:46:57 EST 2021
 ---------------------------------------

@@ -15,6 +15,13 @@ def dataset_to_np(dataset):
     y = np.asarray(y)
     return X, y
 
+def detachData(data):
+    if torch.is_tensor(data):
+        data = data.detach().cpu().numpy()
+    data = np.asarray(data)
+    assert not torch.is_tensor(data)
+    return data
+
 def mase(predictions, truth):
     N = truth.shape[0]
     mean = np.mean(predictions)

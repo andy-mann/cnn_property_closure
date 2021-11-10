@@ -35,8 +35,8 @@ def main():
     train_data = LoadData(dir, 'train')
     valid_data = LoadData(dir, 'valid')
 
-    train_loader = DataLoader(train_data, batch_size=64, pin_memory=True, num_workers=4)
-    valid_loader = DataLoader(valid_data, batch_size=64, pin_memory=True, num_workers=4)
+    train_loader = DataLoader(train_data, batch_size=32, pin_memory=True, num_workers=4)
+    valid_loader = DataLoader(valid_data, batch_size=32, pin_memory=True, num_workers=4)
 
     print('data loaded')
 

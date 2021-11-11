@@ -41,7 +41,7 @@ def main():
     print('data loaded')
 
     trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=valid_loader)
-    trainer.save_checkpoint("models/test.ckpt")
+    trainer.save_checkpoint("models/best.ckpt")
 
     del train_data
     del valid_data

@@ -15,10 +15,10 @@ class MO_CNN(pl.LightningModule):
         #self.loss_fn = nn.MSELoss()
 
     def loss(self, pred, y):
-        fxn = nn.MSELoss()
+        fxn = nn.L1Loss()
         loss = fxn(pred, y)
-        loss_rms = torch.sqrt(loss)
-        return loss_rms
+        #loss_rms = torch.sqrt(loss)
+        return loss
 
     def configure_optimizers(self):
         self.optimizer = optim.Adam(self.parameters(), lr=.001)

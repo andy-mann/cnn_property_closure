@@ -17,10 +17,11 @@ class MO_CNN(pl.LightningModule):
     def loss(self, pred, y):
         fxn = nn.MSELoss()
         loss = fxn(pred, y)
-        return loss
+        loss_rms = torch.sqrt(loss)
+        return loss_rms
 
     def configure_optimizers(self):
-        self.optimizer = optim.Adam(self.parameters(), lr=.001, weight_decay=.001)
+        self.optimizer = optim.Adam(self.parameters(), lr=.001)
         self.scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=120, eta_min=1e-8)
 
         return {

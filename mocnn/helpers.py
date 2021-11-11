@@ -25,12 +25,12 @@ def detachData(data):
     assert not torch.is_tensor(data)
     return data
 
-def mase(predictions, truth):
-    N = truth.shape[0]
-    mean = np.mean(predictions)
-    return 1/N * np.sum(abs(predictions-truth) / mean)
-
-
 def mae(predictions, truth):
     N = truth.shape[0]
-    return 1/N * np.sum(abs(predictions - truth))
+    return 1/N * np.sum(abs(truth - predictions))
+
+def mase(predictions, truth):
+    mean = np.mean(truth)
+    return mae(predictions, truth) / mean
+
+

@@ -36,7 +36,7 @@ class Responses():
         self.stress = stress
         self.strain = strain
 
-    def get_effective_property(self, case, overwrite=False):
+    def get_effective_property(self, case, component, overwrite=False):
         fp = f'/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/data/{case}_eff_stiffness.h5'
 
         if os.path.exists(fp) and not(overwrite):
@@ -46,8 +46,8 @@ class Responses():
             stress_avg = np.sum(self.stress,axis=1) / len(self.stress[0,:,0])
             strain_avg = np.sum(self.strain,axis=1) / len(self.strain[0,:,0])
 
-            s = stress_avg[:,0]
-            e = strain_avg[:,0]
+            s = stress_avg[:,component]
+            e = strain_avg[:,component]
 
             eff_p = (s / e)[:,None]
             hf = h5py.File(fp, 'w')

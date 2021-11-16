@@ -10,7 +10,7 @@ class MO_CNN(pl.LightningModule):
         #self.save_hyperparameters()
         self.results = None
 
-        self.net = MultiOutputCNN()
+        self.net = SimpleCNN()
 
         #self.loss_fn = nn.MSELoss()
 

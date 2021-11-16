@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+from mocnn import networks
 
 
 def count_parameters(model):

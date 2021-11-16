@@ -13,7 +13,7 @@ class MultiOutputCNN(nn.Module):
             ConvBlock(16,32),
             ConvBlock(32,64),
             ConvBlock(64,128),
-	    ConvBlock(128,64),
+	        ConvBlock(128,64),
             ConvBlock(64,32),
             ConvBlock(32,16),
             ConvBlock(16,8),
@@ -21,6 +21,23 @@ class MultiOutputCNN(nn.Module):
             Mean()
         )
 
-
     def forward(self,x):
         return self.MultiOutputCNN(x)
+
+
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super(SimpleCNN, self).__init__()
+
+        self.SimpleCNN = nn.Sequential(
+            ConvBlock(1,128,3),
+            ConvBlock(128,64),
+            ConvBlock(64,32),
+            ConvBlock(32,16),
+            ConvBlock(16,8),
+            ConvBlock(8,1,1),
+            Mean()
+        )
+
+    def forward(self,x):
+        return self.SimpleCNN(x)

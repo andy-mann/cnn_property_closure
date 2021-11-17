@@ -34,7 +34,7 @@ class SimpleCNN(nn.Module):
             ConvBlock(64,32),
             ConvBlock(32,16),
             ConvBlock(16,8),
-            ConvBlock(8,1,1),
+            ConvBlock(8,2,1),
             Mean()
         )
 

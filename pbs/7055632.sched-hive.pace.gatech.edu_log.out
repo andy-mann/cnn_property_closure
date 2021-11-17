@@ -1,0 +1,70 @@
+---------------------------------------
+Begin PBS Prologue Wed Nov 17 08:24:35 EST 2021
+Job ID:     7055632.sched-hive.pace.gatech.edu
+User ID:    amann37
+Job name:   NN_Training
+Queue:      hive-gpu-short
+End PBS Prologue Wed Nov 17 08:24:35 EST 2021
+---------------------------------------
+Wed Nov 17 08:24:35 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 465.19.01    Driver Version: 465.19.01    CUDA Version: 11.3     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA Tesla V1...  Off  | 00000000:3B:00.0 Off |                    0 |
+| N/A   35C    P0    24W / 250W |      0MiB / 16160MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+/storage/home/hhive1/amann37/code/materials_informatics
+/storage/home/hhive1/amann37/code/materials_informatics
+python run_cnn.py
+/storage/home/hhive1/amann37/.conda/envs/mat_inf/lib/python3.9/site-packages/pytorch_lightning/trainer/connectors/callback_connector.py:90: LightningDeprecationWarning: Setting `Trainer(progress_bar_refresh_rate=0)` is deprecated in v1.5 and will be removed in v1.7. Please pass `pytorch_lightning.callbacks.progress.TQDMProgressBar` with `refresh_rate` directly to the Trainer's `callbacks` argument instead. Or, to disable the progress bar pass `enable_progress_bar = False` to the Trainer.
+  rank_zero_deprecation(
+GPU available: True, used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name | Type      | Params
+-----------------------------------
+0 | net  | SimpleCNN | 295 K 
+-----------------------------------
+295 K     Trainable params
+0         Non-trainable params
+295 K     Total params
+1.182     Total estimated model params size (MB)
+/storage/home/hhive1/amann37/scratch/homogenization_data
+starting up the matrix
+There are 295516 tunable parameters in this model
+data loaded
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+training complete!
+loading test data!
+--------------------------------------------------------------------------------
+DATALOADER:0 TEST RESULTS
+{}
+--------------------------------------------------------------------------------
+MASE is [0.93377244 0.8337519 ] and MAE is [0.2617368  0.24648958]
+---------------------------------------
+Begin PBS Epilogue Wed Nov 17 08:32:15 EST 2021
+Job ID:     7055632.sched-hive.pace.gatech.edu
+User ID:    amann37
+Job name:   NN_Training
+Resources:  nodes=1:ppn=4:gpus=1,pmem=64gb,walltime=04:00:00,neednodes=1:ppn=4:gpus=1
+Rsrc Used:  cput=00:13:15,vmem=177016528kb,walltime=00:07:39,mem=11460032kb,energy_used=0
+Queue:      hive-gpu-short
+Nodes:     
+atl1-1-01-018-31.pace.gatech.edu
+End PBS Epilogue Wed Nov 17 08:32:15 EST 2021
+---------------------------------------

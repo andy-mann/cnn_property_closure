@@ -19,9 +19,9 @@ class LoadData(Dataset):
         return stats
 
     def _loadProp(self):
-        property = h5py.File(os.path.join(self.dir, f'{self.mode}_eff_stiffness.h5'), 'r')
+        property = h5py.File(os.path.join(self.dir, f'{self.mode}_stiffness.h5'), 'r')
         property = np.asarray(property['effective_stiffness'])
-        property = (property - np.min(property)) / (np.max(property) - np.min(property))
+        property = (property - np.min(property,axis=0)) / (np.max(property,axis=0) - np.min(property,axis=0))
         return property
 
     

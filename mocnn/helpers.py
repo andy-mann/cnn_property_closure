@@ -7,7 +7,7 @@ def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def un_normalize(predictions, truth):
-    unnorm = (predictions * (np.max(truth) - np.min(truth))) + np.min(truth)
+    unnorm = (predictions * (np.max(truth,axis=0) - np.min(truth,axis=0))) + np.min(truth,axis=0)
     return unnorm
 
 
@@ -28,10 +28,10 @@ def detachData(data):
 
 def mae(predictions, truth):
     N = truth.shape[0]
-    return 1/N * np.sum(abs(truth - predictions))
+    return 1/N * np.sum(abs(truth - predictions), axis=0)
 
 def mase(predictions, truth):
-    mean = np.mean(truth)
+    mean = np.mean(truth, axis=0)
     return mae(predictions, truth) / mean
 
 

@@ -12,12 +12,11 @@ class MultiOutputCNN(nn.Module):
             ConvBlock(8,16),
             ConvBlock(16,32),
             ConvBlock(32,64),
-            ConvBlock(64,128),
-	        ConvBlock(128,64),
+            ConvBlock(64,64),  
             ConvBlock(64,32),
             ConvBlock(32,16),
             ConvBlock(16,8),
-            ConvBlock(8,1,1),
+            ConvBlock(8,2,1),
             Mean()
         )
 

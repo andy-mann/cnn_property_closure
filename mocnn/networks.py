@@ -30,8 +30,7 @@ class SimpleCNN(nn.Module):
         super(SimpleCNN, self).__init__()
 
         self.SimpleCNN = nn.Sequential(
-            ConvBlock(1,128,3),
-            ConvBlock(128,64),
+            ConvBlock(1,64),
             ConvBlock(64,32),
             ConvBlock(32,16),
             ConvBlock(16,8),

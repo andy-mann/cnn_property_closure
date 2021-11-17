@@ -25,8 +25,7 @@ def main():
 
     model = MO_CNN()
     model = model.float()
-    trainer = pl.Trainer(max_epochs=120
-    , gpus=-1, progress_bar_refresh_rate=0)
+    trainer = pl.Trainer(max_epochs=120, gpus=-1, progress_bar_refresh_rate=0)
     #trainer = pl.Trainer(max_epochs=1)
 
     network_size = count_parameters(model)
@@ -35,11 +34,12 @@ def main():
     train_data = LoadData(dir, 'train')
     valid_data = LoadData(dir, 'valid')
 
-    train_loader = DataLoader(train_data, batch_size=32, pin_memory=True, num_workers=4)
-    valid_loader = DataLoader(valid_data, batch_size=32, pin_memory=True, num_workers=4)
+    train_loader = DataLoader(train_data, batch_size=32, pin_memory=True, num_workers=2)
+    valid_loader = DataLoader(valid_data, batch_size=32, pin_memory=True, num_workers=2)
 
     print('data loaded')
 
+    #trainer.fit(model, train_dataloaders=train_loader)
     trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=valid_loader)
     trainer.save_checkpoint("models/best.ckpt")
 
@@ -69,8 +69,8 @@ def main():
 
     print(f'MASE is {MASE * 100} and MAE is {MAE * 100}')
 
-    pred_vs_truth(predictions, y_test, dir)
-
+    #pred_vs_truth(predictions, y_test, dir)
+    
     return model
 
 

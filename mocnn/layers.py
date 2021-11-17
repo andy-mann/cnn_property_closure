@@ -3,17 +3,18 @@ import torch
 
 
 class ConvBlock(nn.Module):
-    def __init__(self, channels_in, channels_out, kernel_size=3):
+    def __init__(self, channels_in, channels_out, kernel_size=3, s=1):
         super(ConvBlock, self).__init__()
 
         self.ks = kernel_size
         self.din = channels_in
         self.dout = channels_out
+        self.s = s
 
 
         self.block = nn.Sequential(
             nn.Conv3d(
-                in_channels=self.din, out_channels=self.dout, kernel_size=self.ks, stride=1),
+                in_channels=self.din, out_channels=self.dout, kernel_size=self.ks, stride=s),
             nn.PReLU(num_parameters=self.dout)
 	        #nn.ReLU()
         )
@@ -27,4 +28,4 @@ class Mean(nn.Module):
         super(Mean, self).__init__()
 
     def forward(self,x):
-        return torch.mean(x,(1,2,3,4))[:,None]
+        return torch.mean(x,(2,3,4))

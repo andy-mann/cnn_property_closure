@@ -1,5 +1,5 @@
 #PBS -N NN_Training    		 # job name
-#PBS -l nodes=1:ppn=2:gpus=1     # number of nodes, cores per node, and gpus required
+#PBS -l nodes=1:ppn=4:gpus=1     # number of nodes, cores per node, and gpus required
 #PBS -l pmem=64gb                # memory per core
 #PBS -l walltime=4:00:00         # duration of the job (ex: 15 min)
 #PBS -q hive-gpu-short         	 # queue name (where job is submitted)

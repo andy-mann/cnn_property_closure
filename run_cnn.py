@@ -17,6 +17,8 @@ dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
 #dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 print(dir)
 
+model_indicator = 'E_2'
+
 def main():
     print('starting up the matrix')
 
@@ -41,7 +43,7 @@ def main():
 
     #trainer.fit(model, train_dataloaders=train_loader)
     trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=valid_loader)
-    trainer.save_checkpoint("models/best.ckpt")
+    trainer.save_checkpoint(f"models/{model_indicator}.ckpt")
 
     del train_data
     del valid_data
@@ -50,7 +52,6 @@ def main():
 
     print('training complete!')
     print('loading test data!')
-
 
     test_data = LoadData(dir, 'test')
     test_loader = DataLoader(test_data, batch_size=32, pin_memory=True, num_workers=4)
@@ -69,7 +70,8 @@ def main():
 
     print(f'MASE is {MASE * 100} and MAE is {MAE * 100}')
 
-    #pred_vs_truth(predictions, y_test, dir)
+    parity(predictions[:,0], y_test[:,0], 'C11', model_indicator, os.getcwd())
+    parity(predictions[:,1], y_test[:,1], 'C66', model_indicator, os.getcwd())
     
     return model
 

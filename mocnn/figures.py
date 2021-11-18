@@ -4,11 +4,11 @@ import os
 from mocnn.helpers import *
 
 
-def pred_vs_truth(prediction, truth, fpath):
+def parity(prediction, truth, component, model, fpath):
     prediction = un_normalize(prediction, truth)
 
     plt.scatter(truth, prediction)
-    plt.xlabel('True Stifness')
-    plt.ylabel('Predicted Stiffness')
-    plt.savefig(f'{fpath}/output')
+    plt.xlabel(f'True {component}')
+    plt.ylabel(f'Predicted {component}')
+    plt.savefig(f'{fpath}/output/{model}_{component}.png')
 

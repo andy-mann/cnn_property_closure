@@ -36,7 +36,7 @@ class LoadData(Dataset):
         return len(self.property)
 
     def __getitem__(self,idx):
-        x = self.stats[idx][None]
+        x = self.micros[idx][None]
         y = self.property[idx]
 
         x = torch.as_tensor(x).float()

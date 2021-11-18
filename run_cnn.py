@@ -17,7 +17,7 @@ dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
 #dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 print(dir)
 
-model_indicator = 'D_2'
+model_indicator = 'D_2_micros'
 
 def main():
     print('starting up the matrix')

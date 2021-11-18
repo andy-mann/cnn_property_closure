@@ -9,6 +9,7 @@ from mocnn.dataloader import LoadData
 from mocnn.helpers import *
 from mocnn.figures import *
 from preprocessing import *
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
 cwd = os.getcwd()
 save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/data'
@@ -17,7 +18,7 @@ dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
 #dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 print(dir)
 
-model_indicator = 'D_2_micros'
+model_indicator = 'D_2_early_stopping'
 
 def main():
     print('starting up the matrix')
@@ -27,7 +28,7 @@ def main():
 
     model = MO_CNN()
     model = model.float()
-    trainer = pl.Trainer(max_epochs=120, gpus=-1, progress_bar_refresh_rate=0)
+    trainer = pl.Trainer(max_epochs=2000, gpus=-1,callbacks=[EarlyStopping(monitor='val_loss')],  progress_bar_refresh_rate=0)
     #trainer = pl.Trainer(max_epochs=1)
 
     network_size = count_parameters(model)

@@ -16,9 +16,9 @@ class ConvBlock(nn.Module):
         self.block = nn.Sequential(
             nn.Conv3d(
                 in_channels=self.din, out_channels=self.dout, kernel_size=self.ks, stride=s),
-            #nn.PReLU(num_parameters=self.dout)
+            nn.PReLU(num_parameters=self.dout)
 	        #nn.ReLU()
-            nn.LeakyReLU()
+            #nn.LeakyReLU()
         )
 
     def forward(self,x):

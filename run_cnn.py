@@ -61,7 +61,7 @@ def main():
     predictions = model.return_results()
     predictions = predictions.cpu().numpy()
 
-    np.save(os.path.join(dir, 'results.npy'), predictions)
+    np.save(os.path.join(os.getcwd(), 'output', f'{model_indicator}_predictions.npy'), predictions)
 
     x_test, y_test = dataset_to_np(test_data)
 

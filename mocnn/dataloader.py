@@ -9,9 +9,10 @@ class LoadData(Dataset):
         self.dir = dir
         self.mode = mode
 
-        self.stats = self._loadStats()
         self.property = self._loadProp()
-        self.micros = self._loadMicros()
+        self.stats = self._loadStats()
+        
+        #self.micros = self._loadMicros()
 
     def _loadMicros(self):
         micros = h5py.File(os.path.join(self.dir, f'{self.mode}_micros.h5'), 'r')
@@ -33,12 +34,11 @@ class LoadData(Dataset):
 
     
     def __len__(self):
-        return len(self.property)
+        return len(self.stats)
 
     def __getitem__(self,idx):
         x = self.stats[idx][None]
         y = self.property[idx]
-
         x = torch.as_tensor(x).float()
         y = torch.as_tensor(y).float()
-        return x, y
+        return x,y

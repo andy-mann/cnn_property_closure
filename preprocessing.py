@@ -2,12 +2,10 @@ import h5py
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-from dataclasses import dataclass
 
-@dataclass
 class Structures():
-    def __init__(self, structures):
-        self.structures = structures
+    def __init__(self):
+        self
 
     def print_structure(self, idx):
         plt.imshow(self.structures[idx,0,:,:,15])
@@ -29,6 +27,18 @@ class Structures():
         f = np.fft.irfftn(F, axes=(1,2,3))
         fshift = np.fft.fftshift(f, axes=(1,2,3))
         return fshift
+
+    def write_data(self, stats, case, overwrite=False):
+        fp = os.path.join(os.getcwd(), 'inputs', f'{case}_stats.h5')
+        if os.path.exists(fp) and not(overwrite):
+            dat = h5py.File(fp, 'r')
+            stats = dat['2PS']
+        else:
+            hf = h5py.File(fp, 'w')
+            hf.create_dataset('2PS', data=stats, compression='gzip')
+            hf.close()
+
+
 
 
 class Responses():
@@ -53,6 +63,7 @@ class Responses():
             hf = h5py.File(fp, 'w')
             print(eff_p.shape)
             hf.create_dataset('effective_stiffness', data=eff_p, compression='gzip')
+            hf.close()
 
 
         return eff_p
@@ -62,65 +73,3 @@ class Responses():
 
         plt.scatter(np.arange(len(array[:,0])), array[:,0])
         plt.show()
-
-
-'''
-save_dir = '/Users/andrew/Dropbox (GaTech)/ME-DboxMgmt-Kalidindi/Andrew Mann/data'
-
-
-cwd = os.getcwd()
-#------------------load microstructure data---------------------#
-train_m = os.path.join(cwd, '..', '..', '..', 'Elastic_Localization_Data', 'cr_50_full', '31_c50_train_micros.h5')
-test_m = os.path.join(cwd, '..', '..', '..', 'Elastic_Localization_Data', 'cr_50_full', '31_c50_test_micros.h5')
-valid_m = os.path.join(cwd, '..', '..', '..', 'Elastic_Localization_Data', 'cr_50_full', '31_c50_valid_micros.h5')
-
-train_m = h5py.File(train_m)
-#test_m = h5py.File(test_m)
-#valid_m = h5py.File(valid_m)
-
-train_data = train_m['micros']
-#test_data = test_m['micros']
-#valid_data = valid_m['micros']
-
-#m = np.concatenate((train_data, test_data, valid_data), axis=0)
-
-#------------------load response data---------------------#
-
-train_r = os.path.join(cwd, '..', '..', '..', 'Elastic_Localization_Data', 'cr_50_full', '31_c50_train_responses.h5')
-test_r = os.path.join(cwd, '..', '..', '..', 'Elastic_Localization_Data', 'cr_50_full', '31_c50_test_responses.h5')
-valid_r = os.path.join(cwd, '..', '..', '..', 'Elastic_Localization_Data', 'cr_50_full', '31_c50_valid_responses.h5')
-
-train_r = h5py.File(train_r)
-test_r = h5py.File(test_r)
-valid_r = h5py.File(valid_r)
-
-print('data loaded')
-
-train_stress = train_r['stress']
-#test_stress = test_r['stress']
-#valid_stress = valid_r['stress']
-
-train_strain = train_r['strain']
-#test_strain = test_r['strain']
-#valid_strain = valid_r['strain']
-
-#e = np.concatenate((train_strain, test_strain, valid_strain), axis=0)
-#s = np.concatenate((train_stress, test_stress, valid_stress), axis=0)
-
-
-
-x = Structures(train_data[0])
-#vf = x.get_vf()[:,0]
-stats = x.calc_statistics()
-
-
-train = Responses(train_stress, train_strain)
-eff_p = train.get_effective_property(case='train')
-
-#test = Responses(test_stress, test_strain)
-#test.get_effective_property(case='test')
-
-#valid = Responses(valid_stress, valid_strain)
-#valid.get_effective_property(case='valid')
-#y.plot_effective_property()
-'''

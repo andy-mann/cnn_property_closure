@@ -39,3 +39,21 @@ class SimpleCNN(nn.Module):
 
     def forward(self,x):
         return self.SimpleCNN(x)
+
+class NetworkF(nn.module):
+    def __init__(self):
+        super(NetworkF, self).__init__()
+
+        self.NetworkF = nn.Sequential(
+            ConvBlock(1,64,5,2),
+            ConvBlock(64,32,3),
+            ConvBlock(32,16,3),
+            ConvBlock(16,8,3),
+            ConvBlock(8,4,3),
+            ConvBlock(4,2,6)
+        )
+
+    def forward(self,x):
+        x = self.NetworkF(x)
+        x = torch.squeeze(x)
+        return x

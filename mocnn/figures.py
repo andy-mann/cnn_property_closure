@@ -12,4 +12,3 @@ def parity(prediction, truth, component, model, fpath):
     plt.ylabel(f'Predicted {component}')
     plt.savefig(f'{fpath}/output/{model}_{component}.png')
     plt.close()
-

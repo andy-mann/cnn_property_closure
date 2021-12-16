@@ -2,5 +2,6 @@ __pycache__/
 MaterialsInformaticsExamples/
 logs/
 pymks/
+inputs/
 runs/
 ToolsInDevelopment/

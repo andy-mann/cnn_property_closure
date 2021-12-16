@@ -9,7 +9,7 @@ class MO_CNN(pl.LightningModule):
         super().__init__()
         self.results = None
 
-        self.net = SimpleCNN()
+        self.net = NetworkF()
 
     def loss(self, pred, y):
         fxn = nn.L1Loss()
@@ -57,8 +57,6 @@ class MO_CNN(pl.LightningModule):
             self.results = y_pred
         else:
             self.results = torch.cat((self.results, y_pred), dim=0)
-
-        return loss
 
     def return_results(self):
         return self.results

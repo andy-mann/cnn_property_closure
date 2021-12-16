@@ -18,7 +18,12 @@ dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
 #dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 print(dir)
 
-model_indicator = 'D_2_early_stopping'
+model_indicator = 'F'
+
+test_set = 'boundary'
+train = True
+test = True
+expand_boundary = False
 
 def main():
     print('starting up the matrix')
@@ -26,53 +31,78 @@ def main():
     seed = None
     np.random.seed(seed)
 
-    model = MO_CNN()
+    if train:
+        model = MO_CNN()
+    else:
+        model = MO_CNN.load_from_checkpoint(checkpoint_path='/Users/andrew/Dropbox (GaTech)/code/class/materials_informatics/models/D_2_240.ckpt')
+
     model = model.float()
-    trainer = pl.Trainer(max_epochs=2000, gpus=-1,callbacks=[EarlyStopping(monitor='val_loss')],  progress_bar_refresh_rate=0)
-    #trainer = pl.Trainer(max_epochs=1)
 
-    network_size = count_parameters(model)
-    print(f'There are {network_size} tunable parameters in this model')
+    trainer = pl.Trainer(max_epochs=2000, gpus=-1, progress_bar_refresh_rate=0)
+    #trainer = pl.Trainer(max_epochs=2000, gpus=-1,callbacks=[EarlyStopping(monitor='val_loss')],  progress_bar_refresh_rate=0)
+    #trainer = pl.Trainer(max_epochs=1)    
 
-    train_data = LoadData(dir, 'train')
-    valid_data = LoadData(dir, 'valid')
+    if train:
+        network_size = count_parameters(model)
+        print(f'There are {network_size} tunable parameters in this model')
 
-    train_loader = DataLoader(train_data, batch_size=32, pin_memory=True, num_workers=4)
-    valid_loader = DataLoader(valid_data, batch_size=32, pin_memory=True, num_workers=4)
+        train_data = LoadData(dir, 'train')
+        valid_data = LoadData(dir, 'valid')
 
-    print('data loaded')
+        train_loader = DataLoader(train_data, batch_size=32, pin_memory=True, num_workers=4)
+        valid_loader = DataLoader(valid_data, batch_size=32, pin_memory=True, num_workers=4)
 
-    #trainer.fit(model, train_dataloaders=train_loader)
-    trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=valid_loader)
-    trainer.save_checkpoint(f"models/{model_indicator}.ckpt")
+        print('data loaded')
 
-    del train_data
-    del valid_data
-    del train_loader
-    del valid_loader
+        #trainer.fit(model, train_dataloaders=train_loader)
+        trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=valid_loader)
+        trainer.save_checkpoint(f"models/{model_indicator}.ckpt")
 
-    print('training complete!')
-    print('loading test data!')
+        del train_data
+        del valid_data
+        del train_loader
+        del valid_loader
 
-    test_data = LoadData(dir, 'test')
-    test_loader = DataLoader(test_data, batch_size=32, pin_memory=True, num_workers=4)
+        print('training complete!')
+        print('loading test data!')
+    elif test:
+        test_data = LoadData(dir, 'test')
+        test_loader = DataLoader(test_data, batch_size=32, pin_memory=True, num_workers=4)
 
-    trainer.test(model, dataloaders=test_loader)
+        trainer.test(model, dataloaders=test_loader)
 
-    predictions = model.return_results()
-    predictions = predictions.cpu().numpy()
+        predictions = model.return_results()
+        predictions = predictions.cpu().numpy()
 
-    np.save(os.path.join(os.getcwd(), 'output', f'{model_indicator}_predictions.npy'), predictions)
+        np.save(os.path.join(os.getcwd(), 'output', f'{model_indicator}_predictions.npy'), predictions)
 
-    x_test, y_test = dataset_to_np(test_data)
+        x, y_test = dataset_to_np(test_data)
 
-    MASE = mase(predictions, y_test)
-    MAE = mae(predictions, y_test)
+        MASE = mase(predictions, y_test)
+        MAE = mae(predictions, y_test)
 
-    print(f'MASE is {MASE * 100} and MAE is {MAE * 100}')
+        print(f'MASE is {MASE * 100} and MAE is {MAE * 100}')
 
-    parity(predictions[:,0], y_test[:,0], 'C11', model_indicator, os.getcwd())
-    parity(predictions[:,1], y_test[:,1], 'C66', model_indicator, os.getcwd())
+        parity(predictions[:,0], y_test[:,0], 'C11', model_indicator, os.getcwd())
+        parity(predictions[:,1], y_test[:,1], 'C66', model_indicator, os.getcwd())
+    elif expand_boundary:
+        print('expanding boundary')
+        #test_data = LoadData(dir, 'boundary')
+        #test_loader = DataLoader(test_data, batch_size=32, pin_memory=True, num_workers=4)
+        fp = os.path.join(cwd, 'inputs', 'pc_interpolate_stats.h5')
+        dat = h5py.File(fp)
+        x = np.array(dat['2PS'])
+        print(x.shape)
+        x = x[:,None,...].real
+        print(x.shape)
+        x = torch.as_tensor(x).float()
+
+        model.eval()
+        predictions = model(x)
+        predictions = predictions.detach().numpy()
+        predictions = un_normalize(predictions, np.array(((8067.9,2307), (161.5,46.15))))
+
+        np.save(os.path.join(os.getcwd(), 'output', 'results', f'{model_indicator}_pc_interp_predictions.npy'), predictions)
     
     return model
 

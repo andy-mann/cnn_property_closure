@@ -8,7 +8,7 @@ from mocnn.MOCNN import MO_CNN
 from mocnn.dataloader import LoadData
 from mocnn.helpers import *
 from mocnn.figures import *
-from preprocessing import *
+from tools import *
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
 cwd = os.getcwd()
@@ -18,7 +18,7 @@ dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
 #dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 print(dir)
 
-model_indicator = 'F'
+model_indicator = 'D_60_15_25'
 
 test_set = 'boundary'
 train = True
@@ -38,8 +38,8 @@ def main():
 
     model = model.float()
 
-    trainer = pl.Trainer(max_epochs=2000, gpus=-1, progress_bar_refresh_rate=0)
-    #trainer = pl.Trainer(max_epochs=2000, gpus=-1,callbacks=[EarlyStopping(monitor='val_loss')],  progress_bar_refresh_rate=0)
+    #trainer = pl.Trainer(max_epochs=2000, gpus=-1, progress_bar_refresh_rate=0)
+    trainer = pl.Trainer(max_epochs=2000, gpus=-1,callbacks=[EarlyStopping(monitor='val_loss')],  progress_bar_refresh_rate=0)
     #trainer = pl.Trainer(max_epochs=1)    
 
     if train:
@@ -65,7 +65,7 @@ def main():
 
         print('training complete!')
         print('loading test data!')
-    elif test:
+
         test_data = LoadData(dir, 'test')
         test_loader = DataLoader(test_data, batch_size=32, pin_memory=True, num_workers=4)
 
@@ -89,10 +89,12 @@ def main():
         print('expanding boundary')
         #test_data = LoadData(dir, 'boundary')
         #test_loader = DataLoader(test_data, batch_size=32, pin_memory=True, num_workers=4)
-        fp = os.path.join(cwd, 'inputs', 'pc_interpolate_stats.h5')
-        dat = h5py.File(fp)
-        x = np.array(dat['2PS'])
-        print(x.shape)
+        #fp = os.path.join(cwd, 'inputs', 'pc_interpolate_stats.h5')
+        #dat = h5py.File(fp)
+        #x = np.array(dat['2PS'])
+        #print(x.shape)
+        fp = os.path.join(cwd, 'inputs', 'avg_stats.npy')
+        x = np.load(fp)
         x = x[:,None,...].real
         print(x.shape)
         x = torch.as_tensor(x).float()
@@ -102,7 +104,7 @@ def main():
         predictions = predictions.detach().numpy()
         predictions = un_normalize(predictions, np.array(((8067.9,2307), (161.5,46.15))))
 
-        np.save(os.path.join(os.getcwd(), 'output', 'results', f'{model_indicator}_pc_interp_predictions.npy'), predictions)
+        np.save(os.path.join(os.getcwd(), 'output', 'results', f'{model_indicator}_avg_stats.npy'), predictions)
     
     return model
 

@@ -9,7 +9,7 @@ class MO_CNN(pl.LightningModule):
         super().__init__()
         self.results = None
 
-        self.net = NetworkF()
+        self.net = SimpleCNN()
 
     def loss(self, pred, y):
         fxn = nn.L1Loss()

@@ -40,7 +40,7 @@ class SimpleCNN(nn.Module):
     def forward(self,x):
         return self.SimpleCNN(x)
 
-class NetworkF(nn.module):
+class NetworkF(nn.Module):
     def __init__(self):
         super(NetworkF, self).__init__()
 

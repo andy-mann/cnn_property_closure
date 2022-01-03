@@ -22,14 +22,15 @@ class LoadData(Dataset):
 
 
     def _loadStats(self):
-        stats = h5py.File(os.path.join(self.dir, f'{self.mode}_stats.h5'), 'r')
+        stats = h5py.File(os.path.join(self.dir, f'{self.mode}_stats_u.h5'), 'r')
         stats = np.asarray(stats['2PS']).real        
         return stats
 
     def _loadProp(self):
-        property = h5py.File(os.path.join(self.dir, f'{self.mode}_stiffness.h5'), 'r')
+        property = h5py.File(os.path.join(self.dir, f'{self.mode}_stiffness_u.h5'), 'r')
         property = np.asarray(property['effective_stiffness'])
-        property = (property - np.min(property,axis=0)) / (np.max(property,axis=0) - np.min(property,axis=0))
+        #property = (property - np.min(property,axis=0)) / (np.max(property,axis=0) - np.min(property,axis=0))
+        property = (property - np.array((161.5,46.15)) / np.array((8067.9,2307)) - np.array((161.5,46.15)))
         return property
 
     

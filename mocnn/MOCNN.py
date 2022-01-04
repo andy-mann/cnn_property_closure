@@ -11,6 +11,13 @@ class MO_CNN(pl.LightningModule):
 
         self.net = SimpleCNN()
 
+        self.train_num_accum = 0
+        self.train_loss_accum = 0
+        self.val_num_accum = 0
+        self.val_loss_accum = 0
+        self.test_num_accum = 0
+        self.test_loss_accum = 0
+
     def loss(self, pred, y):
         fxn = nn.L1Loss()
         loss = fxn(pred, y)
@@ -32,9 +39,20 @@ class MO_CNN(pl.LightningModule):
         y_pred = self.forward(X)
         loss = self.loss(y_pred, y)
 
+        self.train_loss_accum += loss.detach()
+        self.train_num_accum += 1
+
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)    
         
         return loss
+
+    def training_epoch_end(self, outputs):
+        train_loss_mean = self.train_loss_accum / self.train_num_accum
+        val_loss_mean = self.val_loss_accum / self.val_num_accum
+        self.val_num_accum = 0
+        self.val_loss_accum = 0
+        self.train_num_accum = 0
+        self.train_loss_accum = 0
 
     def validation_step(self, batch, batch_idx):
         X, y = batch
@@ -42,6 +60,9 @@ class MO_CNN(pl.LightningModule):
         with torch.no_grad():
             y_pred = self.forward(X).detach()
             loss = self.loss(y_pred, y).detach()
+
+        self.val_loss_accum += loss
+        self.val_num_accum += 1
 
         self.log('val_loss', loss)
         return loss

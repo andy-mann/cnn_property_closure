@@ -38,8 +38,8 @@ def main():
 
     model = model.float()
 
-    #trainer = pl.Trainer(max_epochs=2000, gpus=-1, progress_bar_refresh_rate=0)
-    trainer = pl.Trainer(max_epochs=2000, gpus=-1,callbacks=[EarlyStopping(monitor='val_loss')],  progress_bar_refresh_rate=0)
+    trainer = pl.Trainer(max_epochs=480, gpus=-1, progress_bar_refresh_rate=0)
+    #trainer = pl.Trainer(max_epochs=2000, gpus=-1,callbacks=[EarlyStopping(monitor='val_loss')],  progress_bar_refresh_rate=0)
     #trainer = pl.Trainer(max_epochs=1)    
 
     if train:

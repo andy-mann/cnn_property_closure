@@ -6,3 +6,8 @@ inputs/
 runs/
 ToolsInDevelopment/
 PlotNeuralNet/
+data/
+output/
+protocol/
+char_shift/
+pbs

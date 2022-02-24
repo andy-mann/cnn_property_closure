@@ -73,3 +73,23 @@ class Responses():
 
         plt.scatter(np.arange(len(array[:,0])), array[:,0])
         plt.show()
+
+
+def discretize_nomax(data, states):
+    return 1 - (abs(data[..., None] - states)) / (states[1] - states[0])
+
+def discretize(x_data, n_state=2, min_=0.0, max_=1.0):
+    return np.maximum(
+        discretize_nomax(
+            np.clip(x_data, min_, max_), #clips the data below min_ to =min_ and above max_ to =max_
+            np.linspace(min_, max_, n_state),
+        ),
+        0,
+    )
+
+def calc_statistics(structures):
+    f_k = np.fft.fftn(structures, axes=(2,3,4))
+    F = 1/31**3 * np.conjugate(f_k[:,1,...]) * f_k[:,1,...]
+    f = np.fft.ifftn(F, axes=(1,2,3))
+    fshift = np.fft.fftshift(f, axes=(1,2,3))
+    return fshift

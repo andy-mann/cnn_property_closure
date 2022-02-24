@@ -26,7 +26,7 @@ class MO_CNN(pl.LightningModule):
 
     def configure_optimizers(self):
         self.optimizer = optim.Adam(self.parameters(), lr=.001)
-        self.scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=480, eta_min=1e-8)
+        self.scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=240, eta_min=1e-8)
 
         return {
             'lr_scheduler': self.scheduler,
@@ -53,6 +53,8 @@ class MO_CNN(pl.LightningModule):
         self.val_loss_accum = 0
         self.train_num_accum = 0
         self.train_loss_accum = 0
+        epoch = self.current_epoch
+
 
     def validation_step(self, batch, batch_idx):
         X, y = batch

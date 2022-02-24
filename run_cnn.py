@@ -18,7 +18,7 @@ dir = '/storage/home/hhive1/amann37/scratch/homogenization_data'
 #dir = os.path.join(cwd, '..', '..', '..', 'ME-DboxMgmt-Kalidindi', 'Andrew Mann', 'data')
 print(dir)
 
-model_indicator = 'D_60_15_25'
+model_indicator = 'A_updated'
 
 test_set = 'boundary'
 train = True
@@ -34,19 +34,18 @@ def main():
     if train:
         model = MO_CNN()
     else:
-        model = MO_CNN.load_from_checkpoint(checkpoint_path='/Users/andrew/Dropbox (GaTech)/code/class/materials_informatics/models/D_2_240.ckpt')
+        model = MO_CNN.load_from_checkpoint(checkpoint_path=f'/Users/andrew/Dropbox (GaTech)/code/class/materials_informatics/models/{model_indicator}.ckpt')
 
     model = model.float()
 
     trainer = pl.Trainer(max_epochs=480, gpus=-1, progress_bar_refresh_rate=0)
-    #trainer = pl.Trainer(max_epochs=2000, gpus=-1,callbacks=[EarlyStopping(monitor='val_loss')],  progress_bar_refresh_rate=0)
     #trainer = pl.Trainer(max_epochs=1)    
 
     if train:
         network_size = count_parameters(model)
         print(f'There are {network_size} tunable parameters in this model')
 
-        train_data = LoadData(dir, 'train')
+        train_data = LoadData(dir, 'new_train')
         valid_data = LoadData(dir, 'valid')
 
         train_loader = DataLoader(train_data, batch_size=32, pin_memory=True, num_workers=4)
@@ -89,11 +88,12 @@ def main():
         print('expanding boundary')
         #test_data = LoadData(dir, 'boundary')
         #test_loader = DataLoader(test_data, batch_size=32, pin_memory=True, num_workers=4)
-        #fp = os.path.join(cwd, 'inputs', 'pc_interpolate_stats.h5')
-        #dat = h5py.File(fp)
+        #fp = os.path.join(cwd, 'inputs', '51_51_51/truncated_51_stats.h5')
+        #dat = h5py.File(os.path.join(dir, 'test_stats_u.h5'))
         #x = np.array(dat['2PS'])
-        #print(x.shape)
-        fp = os.path.join(cwd, 'inputs', 'avg_stats.npy')
+        
+        #fp = os.path.join(cwd, 'inputs', 'expand', 'valid.npy')
+        fp = os.path.join(cwd,'inputs', 'boundary_interpolate_stats.npy')
         x = np.load(fp)
         x = x[:,None,...].real
         print(x.shape)
@@ -103,8 +103,10 @@ def main():
         predictions = model(x)
         predictions = predictions.detach().numpy()
         predictions = un_normalize(predictions, np.array(((8067.9,2307), (161.5,46.15))))
+        print(predictions)
 
-        np.save(os.path.join(os.getcwd(), 'output', 'results', f'{model_indicator}_avg_stats.npy'), predictions)
+        np.save(os.path.join(os.getcwd(), 'protocal', f'{model_indicator}_boundary_cnn.npy'), predictions)
+        #np.save(os.path.join(os.getcwd(), 'output', 'results', f'{model_indicator}_2PS_generated_pred_2.npy'), predictions)
     
     return model
 

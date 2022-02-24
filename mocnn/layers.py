@@ -17,9 +17,6 @@ class ConvBlock(nn.Module):
             nn.Conv3d(
                 in_channels=self.din, out_channels=self.dout, kernel_size=self.ks, stride=s),
             nn.PReLU(num_parameters=self.dout)
-            
-	        #nn.ReLU()
-            #nn.LeakyReLU()
         )
 
     def forward(self,x):

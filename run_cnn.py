@@ -82,8 +82,8 @@ def main():
 
         print(f'MASE is {MASE * 100} and MAE is {MAE * 100}')
 
-        parity(predictions[:,0], y_test[:,0], 'C11', model_indicator, os.getcwd())
-        parity(predictions[:,1], y_test[:,1], 'C66', model_indicator, os.getcwd())
+        #parity(predictions[:,0], y_test[:,0], 'C11', model_indicator, os.getcwd())
+        #parity(predictions[:,1], y_test[:,1], 'C66', model_indicator, os.getcwd())
     elif expand_boundary:
         print('expanding boundary')
         #test_data = LoadData(dir, 'boundary')

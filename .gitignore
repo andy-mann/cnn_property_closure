@@ -10,4 +10,8 @@ data/
 output/
 protocol/
 char_shift/
-pbs
+pbs/
+.ipynb_checkpoints/
+.vscode/
+.egg-info/
+.DS_Store

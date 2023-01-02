@@ -13,5 +13,5 @@ char_shift/
 pbs/
 .ipynb_checkpoints/
 .vscode/
-.egg-info/
+*.egg-info/
 .DS_Store

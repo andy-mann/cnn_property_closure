@@ -1,3 +1,4 @@
+from mimetypes import init
 from .layers import *
 from torch import nn
 import torch
@@ -37,7 +38,13 @@ class SimpleCNN(nn.Module):
             Mean()
         )
 
+        self.fc1 = nn.Linear(dim,dim)
+
     def forward(self,x):
+        stats, cr = x[:,:d-1], x[:,d-1:]
+        cnn_o = self.SimpleCNN(stats)
+        x = torch.cat((cnn_o, cr), 1)
+        out = self.fc1(x)
         return self.SimpleCNN(x)
 
 class NetworkF(nn.Module):

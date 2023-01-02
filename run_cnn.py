@@ -21,9 +21,8 @@ print(dir)
 model_indicator = 'A_updated'
 
 test_set = 'boundary'
-train = True
+train = False
 test = True
-expand_boundary = False
 
 def main():
     print('starting up the matrix')
@@ -81,10 +80,7 @@ def main():
         MAE = mae(predictions, y_test)
 
         print(f'MASE is {MASE * 100} and MAE is {MAE * 100}')
-
-        #parity(predictions[:,0], y_test[:,0], 'C11', model_indicator, os.getcwd())
-        #parity(predictions[:,1], y_test[:,1], 'C66', model_indicator, os.getcwd())
-    elif expand_boundary:
+    elif test:
         print('expanding boundary')
         #test_data = LoadData(dir, 'boundary')
         #test_loader = DataLoader(test_data, batch_size=32, pin_memory=True, num_workers=4)

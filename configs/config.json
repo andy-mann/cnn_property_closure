@@ -1,0 +1,9 @@
+{
+    "save_dir": "/Users/andrew/Documents/PhD/Code/materials_informatics/results",
+    "work_dir": "/Users/andrew/Documents/PhD/Code/materials_informatics/",
+    "model_name": "A_updated",
+    "test_set": "boundary",
+    "train": false,
+    "test": true,
+    "gpus": null
+}
